@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<body style="background-color:lightgrey">
+
+   <head>
+      <title>{{ title }}</title>
+   </head>
+   
+   <body onload="setTimeout('init();', 100);">
+      <h1>Rover 5 Control Panel</h1>
+       <h2>The date and time on the server is: {{ time }}</h2> 
+      
+      <!-- Ignore Google Hangout functionality for now --> 
+      <!-- <script src="https://apis.google.com/js/platform.js" async defer></script>
+      <g:hangout render="createhangout"></g:hangout> -->
+      
+	  <link rel="stylesheet" href="css/style_minified.css" />
+      <script src="camera/js/script.js"></script>
+
+      <center>
+        <div><img id="mjpeg_dest" /></div>
+      </center>
+
+      <!--<img src= "http://192.168.88.236:8081/?action=stream" width="800" height="460"/> -->
+
+      <p>Driving distance increment</p>
+      <select id="speed">
+        <option value="0.1">Distance 1</option>
+        <option value="0.2" selected="selected">Distance 2</option>
+        <option value="0.3">Distance 3</option>
+        <option value="0.4">Distance 4</option>
+        <option value="0.5">Distance 5</option>
+      </select>
+
+      
+      <br><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+      <!-- Directional navigation, add mapping to keyboard arrows next iteration --> 
+           
+      <button onclick="goForward();"> Forward </button>
+      <br>
+      <button onclick="goLeft();"> Left </button>     
+      &nbsp;
+      <button onclick="goStop();"> Stop </button>
+      &nbsp;
+      <button onclick="goRight();"> Right </button>
+      <br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <button onclick="goBackward();"> Back </button>
+      <br><br>
+
+
+      <!-- Make Ajax calls from button clicks to trigger Flask / python code from serveJohnnyPive.py and send commands to robot -->      
+      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+      <script>           
+ 
+	 function goForward() {
+	 	 var speed = document.getElementById('speed').value;
+    	 $.ajax({url:"/forward?speed=" + speed});
+ 
+	 } 
+	 function goBackward() {
+	 	 var speed = document.getElementById('speed').value;
+    	 $.ajax({url:"/backward?speed=" + speed});	 	 
+	 }   
+	 function goStop() {
+	 	 var speed = document.getElementById('speed').value;
+    	 $.ajax({url:"/stop?speed=" + speed});	 	 	 
+	 }  	   
+	 function goLeft() {
+	 	 var speed = document.getElementById('speed').value;
+    	 $.ajax({url:"/left?speed=" + speed});	 	 	 
+	 }  
+	 function goRight() {
+	 	 var speed = document.getElementById('speed').value;
+    	 $.ajax({url:"/right?speed=" + speed});	 	 	 
+	 }  	
+	 
+	 
+	 
+	 $(document).keydown(function(e) {
+      switch(e.which) {
+        case 37: // left
+        goLeft();	
+        break;
+        case 38: // up
+        goForward();
+        break;
+        case 39: // right
+        goRight();	
+        break;
+        case 40: // down
+        goBackward();
+        break;
+        default: return; // exit this handler for other keys
+    }
+    e.preventDefault(); // prevent the default action (scroll / move caret)
+});
+	 
+      </script>          
+   </body>
+</html>
+
